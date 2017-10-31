@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation'
 
 import ListIndex from '../components/ListIndex'
 import ListView from '../components/ListView'
+import ActiveList from '../components/ActiveList'
 
 const Root = StackNavigator({
   Index: {
@@ -16,7 +17,12 @@ const Root = StackNavigator({
     screen: ListView,
     navigationOptions: {
       title: 'List',
-      headerRight: <Button title="Use" color="#016025" onPress={() => {}} />,
+    },
+  },
+  ActiveList: {
+    screen: ActiveList,
+    navigationOptions: {
+      title: 'Inventory',
     },
   },
 })

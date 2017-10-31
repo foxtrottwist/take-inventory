@@ -8,11 +8,11 @@ const ItemBox = styled.View`
   align-items: center;
 `
 
-const ListTitle = ({ title, subtitle }) => (
+const ListItem = ({ title, subtitle }) => (
   <ItemBox>
     <Text>{title}</Text>
     <Text>{subtitle}</Text>
   </ItemBox>
 )
 
-export default ListTitle
+export default ListItem

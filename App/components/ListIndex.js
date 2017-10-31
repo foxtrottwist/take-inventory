@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { ScrollView, TouchableOpacity } from 'react-native'
+import { ScrollView, TouchableOpacity, Button } from 'react-native'
 import styled from 'styled-components/native'
 
-import ListTitle from './ListTitle'
+import ListItem from './ListItem'
 
 const ScrollBox = styled.ScrollView`background-color: #fff;`
 
@@ -284,10 +284,14 @@ class ListIndex extends Component {
     this.props.navigation.navigate('List', { list })
   }
 
+  onSelectInventory() {
+    this.props.navigation.navigate('ActiveList', { list: false })
+  }
+
   renderLists() {
     return this.state.availableLists.map(({ title, _id, list, dateCreated }) => (
       <TouchableOpacity key={_id} onPress={() => this.onListSelect(list)}>
-        <ListTitle
+        <ListItem
           title={title}
           subtitle={`Created on: ${new Date(dateCreated).toLocaleDateString()}`}
         />
@@ -296,7 +300,12 @@ class ListIndex extends Component {
   }
 
   render() {
-    return <ScrollBox>{this.renderLists()}</ScrollBox>
+    return (
+      <ScrollBox>
+        <Button title="Current Inventory List" onPress={() => this.onSelectInventory()} />
+        {this.renderLists()}
+      </ScrollBox>
+    )
   }
 }
 
