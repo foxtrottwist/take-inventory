@@ -2,7 +2,6 @@ import React from 'react'
 import { StackNavigator } from 'react-navigation'
 
 import ListIndex from '../components/ListIndex'
-import ListView from '../components/ListView'
 import ActiveList from '../components/ActiveList'
 
 const Root = StackNavigator({
@@ -13,15 +12,9 @@ const Root = StackNavigator({
     },
   },
   List: {
-    screen: ListView,
-    navigationOptions: {
-      title: 'List',
-    },
-  },
-  ActiveList: {
     screen: ActiveList,
     navigationOptions: {
-      title: 'Inventory',
+      title: 'Inventory List',
     },
   },
 })
