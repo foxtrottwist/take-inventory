@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, Alert } from 'react-native'
 import styled from 'styled-components/native'
+
+import * as XLSX from 'xlsx'
+
+import { writeFile, DocumentDirectoryPath } from 'react-native-fs'
+const DDP = DocumentDirectoryPath + '/'
+const output = str => str
 
 const ScrollBox = styled.ScrollView`background-color: #fff;`
 
@@ -12,7 +18,7 @@ const CountBox = styled.View`
 
 class ActiveList extends Component {
   state = {
-    activeList: null,
+    activeList: [],
   }
 
   incrementByOne(index) {
@@ -27,11 +33,30 @@ class ActiveList extends Component {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 0.25) }))
   }
 
+  exportFile() {
+    const counted = this.state.activeList.map(item => [item.inventoryItem, item.count])
+    /* convert AOA to worksheet */
+    const ws = XLSX.utils.aoa_to_sheet(counted)
+
+    /* build new workbook */
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory')
+
+    /* write file */
+    const wbout = XLSX.write(wb, { type: 'binary', bookType: 'xlsx' })
+    const file = DDP + 'inventory.xlsx'
+    writeFile(file, output(wbout), 'ascii')
+      .then(res => {
+        Alert.alert('exportFile success', 'Exported to ' + file)
+      })
+      .catch(err => {
+        Alert.alert('exportFile Error', 'Error ' + err.message)
+      })
+  }
+
   componentDidMount() {
     const { list } = this.props.navigation.state.params
-    if (this.state.activeList === null) {
-      this.setState({ activeList: list })
-    }
+    this.setState({ activeList: list })
   }
 
   renderInventoryList() {
@@ -51,11 +76,11 @@ class ActiveList extends Component {
   }
 
   render() {
+    console.log(this.state.activeList)
     return (
       <ScrollBox>
-        {!this.state.activeList || this.state.activeList === false
-          ? null
-          : this.renderInventoryList()}
+        <Button onPress={() => this.exportFile()} title="Export List to XLSX" color="#016025" />
+        {!this.state.activeList ? null : this.renderInventoryList()}
       </ScrollBox>
     )
   }
