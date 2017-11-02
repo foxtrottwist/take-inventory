@@ -35,7 +35,6 @@ class ListIndex extends Component {
   }
 
   render() {
-    console.log(this.state)
     return <ScrollBox>{this.renderLists()}</ScrollBox>
   }
 }

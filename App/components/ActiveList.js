@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, Button, Alert } from 'react-native'
 import styled from 'styled-components/native'
-
 import * as XLSX from 'xlsx'
+import Mailer from 'react-native-mail'
 
 import { writeFile, DocumentDirectoryPath } from 'react-native-fs'
 const DDP = DocumentDirectoryPath + '/'
@@ -44,6 +44,32 @@ class ActiveList extends Component {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 0.25) }))
   }
 
+  handleEmail = file => {
+    Mailer.mail(
+      {
+        subject: 'Inventory Count',
+        recipients: ['law.horne@live.com'],
+        body: '<b>A Bold Body</b>',
+        isHTML: true,
+        attachment: {
+          path: file, // The absolute path of the file from which to read data.
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Mime Type: jpg, png, doc, ppt, html, pdf
+        },
+      },
+      (error, event) => {
+        Alert.alert(
+          error,
+          event,
+          [
+            { text: 'Ok', onPress: () => console.log('OK: Email Error Response') },
+            { text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response') },
+          ],
+          { cancelable: true },
+        )
+      },
+    )
+  }
+
   exportFile() {
     const counted = this.state.activeList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
@@ -63,6 +89,8 @@ class ActiveList extends Component {
       .catch(err => {
         Alert.alert('exportFile Error', 'Error ' + err.message)
       })
+
+    this.handleEmail(file)
   }
 
   componentDidMount() {
