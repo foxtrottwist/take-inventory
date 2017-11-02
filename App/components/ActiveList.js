@@ -10,6 +10,17 @@ const output = str => str
 
 const ScrollBox = styled.ScrollView`background-color: #fff;`
 
+const Item = styled.View`
+  height: 100px;
+  justify-content: space-between;
+`
+
+const ItemDetail = styled.View`
+  height: 40px;
+  align-items: center;
+  justify-content: space-between;
+`
+
 const CountBox = styled.View`
   flex-direction: row;
   justify-content: space-around;
@@ -61,17 +72,17 @@ class ActiveList extends Component {
 
   renderInventoryList() {
     return this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
-      <View key={_id}>
-        <CountBox>
+      <Item key={_id}>
+        <ItemDetail>
           <Text>{inventoryItem}</Text>
           <Text>{this.state.activeList[index].count}</Text>
-        </CountBox>
+        </ItemDetail>
         <CountBox>
-          <Button title="plus" onPress={() => this.incrementByOne(index)} />
-          <Button title="plus" onPress={() => this.incrementByOneQuarter(index)} />
-          <Button title="minus" onPress={() => this.decrementByOneQuarter(index)} />
+          <Button title="+1" onPress={() => this.incrementByOne(index)} />
+          <Button title="+1/25" onPress={() => this.incrementByOneQuarter(index)} />
+          <Button title="-1/25" onPress={() => this.decrementByOneQuarter(index)} />
         </CountBox>
-      </View>
+      </Item>
     ))
   }
 
@@ -79,7 +90,7 @@ class ActiveList extends Component {
     console.log(this.state.activeList)
     return (
       <ScrollBox>
-        <Button onPress={() => this.exportFile()} title="Export List to XLSX" color="#016025" />
+        <Button onPress={() => this.exportFile()} title="Export" color="#016025" />
         {!this.state.activeList ? null : this.renderInventoryList()}
       </ScrollBox>
     )
