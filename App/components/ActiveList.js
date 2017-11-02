@@ -87,7 +87,6 @@ class ActiveList extends Component {
   }
 
   render() {
-    console.log(this.state.activeList)
     return (
       <ScrollBox>
         <Button onPress={() => this.exportFile()} title="Export" color="#016025" />
