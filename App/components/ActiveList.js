@@ -1,12 +1,30 @@
 import React, { Component } from 'react'
-import { ScrollView, Alert } from 'react-native'
+import { ScrollView, Text, Alert } from 'react-native'
 import { List, ListItem, Icon, Button } from 'react-native-elements'
+import styled from 'styled-components/native'
 
 import * as XLSX from 'xlsx'
 import Mailer from 'react-native-mail'
 import { writeFile, DocumentDirectoryPath } from 'react-native-fs'
 const DDP = DocumentDirectoryPath + '/'
 const output = str => str
+
+const ItemBox = styled.View`
+  border-bottom-width: 0.3;
+  border-bottom-color: #000;
+`
+
+const ItemDetail = styled.View`
+  align-items: center;
+  margin-top: 8
+  margin-bottom: 8;
+`
+
+const IconBox = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10;
+`
 
 class ActiveList extends Component {
   state = {
@@ -25,20 +43,22 @@ class ActiveList extends Component {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 0.25) }))
   }
 
-  decrementByOneHalf = index => {
-    this.setState(state => ({ activieList: (state.activeList[index].count -= 0.5) }))
+  decrementByOne = index => {
+    this.setState(state => ({ activieList: (state.activeList[index].count -= 1) }))
   }
 
   handleEmail = file => {
+    const body = 'This is a test'
+
     Mailer.mail(
       {
         subject: 'Inventory Count',
         recipients: ['law.horne@live.com'],
-        body: '<b>A Bold Body</b>',
+        body,
         isHTML: true,
         attachment: {
           path: file, // The absolute path of the file from which to read data.
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Mime Type: jpg, png, doc, ppt, html, pdf
+          type: 'application/vnd.ms-excel', // Mime Type: jpg, png, doc, ppt, html, pdf
         },
       },
       (error, event) => {
@@ -87,23 +107,40 @@ class ActiveList extends Component {
     return (
       <List>
         {this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
-          <ListItem
-            key={_id}
-            title={inventoryItem}
-            titleContainerStyle={{ alignItems: 'center' }}
-            subtitle={this.state.activeList[index].count}
-            subtitleContainerStyle={{ alignItems: 'center' }}
-            leftIcon={
-              <Icon type="entypo" name="squared-plus" onPress={() => this.incrementByOne(index)} />
-            }
-            rightIcon={
+          <ItemBox key={_id}>
+            <ItemDetail>
+              <Text>{inventoryItem}</Text>
+            </ItemDetail>
+            <ItemDetail>
+              <Text>{this.state.activeList[index].count}</Text>
+            </ItemDetail>
+            <IconBox>
+              <Icon
+                type="entypo"
+                name="squared-plus"
+                reverse
+                raised
+                onPress={() => this.incrementByOne(index)}
+              />
+
+              <Icon
+                type="entypo"
+                name="squared-plus"
+                reverse
+                raised
+                onPress={() => this.incrementByOneQuarter(index)}
+              />
+
               <Icon
                 type="entypo"
                 name="squared-minus"
+                reverse
+                raised
                 onPress={() => this.decrementByOneQuarter(index)}
+                onLongPress={() => this.decrementByOne(index)}
               />
-            }
-          />
+            </IconBox>
+          </ItemBox>
         ))}
       </List>
     )
