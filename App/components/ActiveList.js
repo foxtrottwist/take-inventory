@@ -1,47 +1,32 @@
 import React, { Component } from 'react'
-import { View, Text, Button, Alert } from 'react-native'
-import styled from 'styled-components/native'
+import { ScrollView, Alert } from 'react-native'
+import { List, ListItem, Icon, Button } from 'react-native-elements'
+
 import * as XLSX from 'xlsx'
 import Mailer from 'react-native-mail'
-
 import { writeFile, DocumentDirectoryPath } from 'react-native-fs'
 const DDP = DocumentDirectoryPath + '/'
 const output = str => str
-
-const ScrollBox = styled.ScrollView`background-color: #fff;`
-
-const Item = styled.View`
-  height: 100px;
-  justify-content: space-between;
-`
-
-const ItemDetail = styled.View`
-  height: 40px;
-  align-items: center;
-  justify-content: space-between;
-`
-
-const CountBox = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  height: 60px;
-`
 
 class ActiveList extends Component {
   state = {
     activeList: [],
   }
 
-  incrementByOne(index) {
+  incrementByOne = index => {
     this.setState(state => ({ activieList: (state.activeList[index].count += 1) }))
   }
 
-  incrementByOneQuarter(index) {
+  incrementByOneQuarter = index => {
     this.setState(state => ({ activieList: (state.activeList[index].count += 0.25) }))
   }
 
-  decrementByOneQuarter(index) {
+  decrementByOneQuarter = index => {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 0.25) }))
+  }
+
+  decrementByOneHalf = index => {
+    this.setState(state => ({ activieList: (state.activeList[index].count -= 0.5) }))
   }
 
   handleEmail = file => {
@@ -70,7 +55,7 @@ class ActiveList extends Component {
     )
   }
 
-  exportFile() {
+  exportFile = () => {
     const counted = this.state.activeList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
     const ws = XLSX.utils.aoa_to_sheet(counted)
@@ -98,28 +83,42 @@ class ActiveList extends Component {
     this.setState({ activeList: list })
   }
 
-  renderInventoryList() {
-    return this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
-      <Item key={_id}>
-        <ItemDetail>
-          <Text>{inventoryItem}</Text>
-          <Text>{this.state.activeList[index].count}</Text>
-        </ItemDetail>
-        <CountBox>
-          <Button title="+1" onPress={() => this.incrementByOne(index)} />
-          <Button title="+1/25" onPress={() => this.incrementByOneQuarter(index)} />
-          <Button title="-1/25" onPress={() => this.decrementByOneQuarter(index)} />
-        </CountBox>
-      </Item>
-    ))
+  renderInventoryList = () => {
+    return (
+      <List>
+        {this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
+          <ListItem
+            key={_id}
+            title={inventoryItem}
+            titleContainerStyle={{ alignItems: 'center' }}
+            subtitle={this.state.activeList[index].count}
+            subtitleContainerStyle={{ alignItems: 'center' }}
+            leftIcon={
+              <Icon type="entypo" name="squared-plus" onPress={() => this.incrementByOne(index)} />
+            }
+            rightIcon={
+              <Icon
+                type="entypo"
+                name="squared-minus"
+                onPress={() => this.decrementByOneQuarter(index)}
+              />
+            }
+          />
+        ))}
+      </List>
+    )
   }
 
   render() {
     return (
-      <ScrollBox>
-        <Button onPress={() => this.exportFile()} title="Export" color="#016025" />
+      <ScrollView>
+        <Button
+          onPress={() => this.exportFile()}
+          title="Export"
+          icon={{ name: 'page-export-doc', type: 'foundation' }}
+        />
         {!this.state.activeList ? null : this.renderInventoryList()}
-      </ScrollBox>
+      </ScrollView>
     )
   }
 }

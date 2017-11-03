@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import { ScrollView, TouchableOpacity, Button } from 'react-native'
-import styled from 'styled-components/native'
+import { ScrollView } from 'react-native'
+import { List, ListItem } from 'react-native-elements'
 import axios from 'axios'
-
-import ListItem from './ListItem'
-
-const ScrollBox = styled.ScrollView`background-color: #fff;`
 
 class ListIndex extends Component {
   state = {
@@ -24,18 +20,22 @@ class ListIndex extends Component {
   }
 
   renderLists() {
-    return this.state.availableLists.map(({ title, _id, list, dateCreated }) => (
-      <TouchableOpacity key={_id} onPress={() => this.onListSelect(list)}>
-        <ListItem
-          title={title}
-          subtitle={`Created on: ${new Date(dateCreated).toLocaleDateString()}`}
-        />
-      </TouchableOpacity>
-    ))
+    return (
+      <List>
+        {this.state.availableLists.map(({ title, _id, list, dateCreated }) => (
+          <ListItem
+            key={_id}
+            title={title}
+            subtitle={`Created on: ${new Date(dateCreated).toLocaleDateString()}`}
+            onPress={() => this.onListSelect(list)}
+          />
+        ))}
+      </List>
+    )
   }
 
   render() {
-    return <ScrollBox>{this.renderLists()}</ScrollBox>
+    return <ScrollView>{this.renderLists()}</ScrollView>
   }
 }
 
