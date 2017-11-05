@@ -13,9 +13,9 @@ const Root = StackNavigator({
   },
   List: {
     screen: ActiveList,
-    navigationOptions: {
-      title: 'Inventory List',
-    },
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.title}`,
+    }),
   },
 })
 

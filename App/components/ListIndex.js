@@ -8,8 +8,8 @@ class ListIndex extends Component {
     availableLists: [],
   }
 
-  onListSelect(list) {
-    this.props.navigation.navigate('List', { list })
+  onListSelect(title, list) {
+    this.props.navigation.navigate('List', { title, list })
   }
 
   componentDidMount() {
@@ -27,7 +27,7 @@ class ListIndex extends Component {
             key={_id}
             title={title}
             subtitle={`Created on: ${new Date(dateCreated).toLocaleDateString()}`}
-            onPress={() => this.onListSelect(list)}
+            onPress={() => this.onListSelect(title, list)}
           />
         ))}
       </List>

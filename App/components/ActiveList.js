@@ -56,7 +56,7 @@ class ActiveList extends Component {
         // dropbox upload headers
         Authorization: `Bearer ${DROP_BOX}`,
         'Dropbox-API-Arg': JSON.stringify({
-          path: '/inventory.xlsx',
+          path: '/Take Inventory/inventory.xlsx',
           mode: 'add',
           autorename: true,
           mute: false,
@@ -91,15 +91,14 @@ class ActiveList extends Component {
       .then(res => {
         Alert.alert('exportFile success', 'Exported to ' + file)
       })
+      .then(() => this.uploadList(file))
       .catch(err => {
         Alert.alert('exportFile Error', 'Error ' + err.message)
       })
-
-    this.uploadList(file)
   }
 
   componentDidMount() {
-    const { list } = this.props.navigation.state.params
+    const { title, list } = this.props.navigation.state.params
     this.setState({ activeList: list })
   }
 
