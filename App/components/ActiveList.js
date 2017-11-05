@@ -4,7 +4,8 @@ import { List, ListItem, Icon, Button } from 'react-native-elements'
 import styled from 'styled-components/native'
 
 import * as XLSX from 'xlsx'
-import Mailer from 'react-native-mail'
+import RNFetchBlob from 'react-native-fetch-blob'
+import { DROP_BOX } from 'react-native-dotenv'
 import { writeFile, DocumentDirectoryPath } from 'react-native-fs'
 const DDP = DocumentDirectoryPath + '/'
 const output = str => str
@@ -47,6 +48,33 @@ class ActiveList extends Component {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 1) }))
   }
 
+  uploadList = file => {
+    RNFetchBlob.fetch(
+      'POST',
+      'https://content.dropboxapi.com/2/files/upload',
+      {
+        // dropbox upload headers
+        Authorization: `Bearer ${DROP_BOX}`,
+        'Dropbox-API-Arg': JSON.stringify({
+          path: '/inventory.xlsx',
+          mode: 'add',
+          autorename: true,
+          mute: false,
+        }),
+        'Content-Type': 'application/octet-stream',
+        // Change BASE64 encoded data to a file path with prefix `RNFetchBlob-file://`.
+        // Or simply wrap the file path with RNFetchBlob.wrap().
+      },
+      RNFetchBlob.wrap(file),
+    )
+      .then(res => {
+        console.log(res.text())
+      })
+      .catch(err => {
+        Alert.alert('exportFile Error', 'Error ' + err.message)
+      })
+  }
+
   exportFile = () => {
     const counted = this.state.activeList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
@@ -66,6 +94,8 @@ class ActiveList extends Component {
       .catch(err => {
         Alert.alert('exportFile Error', 'Error ' + err.message)
       })
+
+    this.uploadList(file)
   }
 
   componentDidMount() {
@@ -74,42 +104,46 @@ class ActiveList extends Component {
   }
 
   renderInventoryList = () => {
-    return this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
-      <ItemBox key={_id}>
-        <ItemDetail>
-          <Text>{inventoryItem}</Text>
-        </ItemDetail>
-        <ItemDetail>
-          <Text>{this.state.activeList[index].count}</Text>
-        </ItemDetail>
-        <IconBox>
-          <Icon
-            type="entypo"
-            name="squared-plus"
-            reverse
-            raised
-            onPress={() => this.incrementByOne(index)}
-          />
+    return (
+      <List>
+        {this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
+          <ItemBox key={_id}>
+            <ItemDetail>
+              <Text>{inventoryItem}</Text>
+            </ItemDetail>
+            <ItemDetail>
+              <Text>{this.state.activeList[index].count}</Text>
+            </ItemDetail>
+            <IconBox>
+              <Icon
+                type="entypo"
+                name="squared-plus"
+                reverse
+                raised
+                onPress={() => this.incrementByOne(index)}
+              />
 
-          <Icon
-            type="entypo"
-            name="squared-plus"
-            reverse
-            raised
-            onPress={() => this.incrementByOneQuarter(index)}
-          />
+              <Icon
+                type="entypo"
+                name="squared-plus"
+                reverse
+                raised
+                onPress={() => this.incrementByOneQuarter(index)}
+              />
 
-          <Icon
-            type="entypo"
-            name="squared-minus"
-            reverse
-            raised
-            onPress={() => this.decrementByOneQuarter(index)}
-            onLongPress={() => this.decrementByOne(index)}
-          />
-        </IconBox>
-      </ItemBox>
-    ))
+              <Icon
+                type="entypo"
+                name="squared-minus"
+                reverse
+                raised
+                onPress={() => this.decrementByOneQuarter(index)}
+                onLongPress={() => this.decrementByOne(index)}
+              />
+            </IconBox>
+          </ItemBox>
+        ))}
+      </List>
+    )
   }
 
   render() {
