@@ -47,34 +47,6 @@ class ActiveList extends Component {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 1) }))
   }
 
-  handleEmail = file => {
-    const body = 'This is a test'
-
-    Mailer.mail(
-      {
-        subject: 'Inventory Count',
-        recipients: ['law.horne@live.com'],
-        body,
-        isHTML: true,
-        attachment: {
-          path: file, // The absolute path of the file from which to read data.
-          type: 'application/vnd.ms-excel', // Mime Type: jpg, png, doc, ppt, html, pdf
-        },
-      },
-      (error, event) => {
-        Alert.alert(
-          error,
-          event,
-          [
-            { text: 'Ok', onPress: () => console.log('OK: Email Error Response') },
-            { text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response') },
-          ],
-          { cancelable: true },
-        )
-      },
-    )
-  }
-
   exportFile = () => {
     const counted = this.state.activeList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
@@ -94,8 +66,6 @@ class ActiveList extends Component {
       .catch(err => {
         Alert.alert('exportFile Error', 'Error ' + err.message)
       })
-
-    this.handleEmail(file)
   }
 
   componentDidMount() {
@@ -104,46 +74,42 @@ class ActiveList extends Component {
   }
 
   renderInventoryList = () => {
-    return (
-      <List>
-        {this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
-          <ItemBox key={_id}>
-            <ItemDetail>
-              <Text>{inventoryItem}</Text>
-            </ItemDetail>
-            <ItemDetail>
-              <Text>{this.state.activeList[index].count}</Text>
-            </ItemDetail>
-            <IconBox>
-              <Icon
-                type="entypo"
-                name="squared-plus"
-                reverse
-                raised
-                onPress={() => this.incrementByOne(index)}
-              />
+    return this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
+      <ItemBox key={_id}>
+        <ItemDetail>
+          <Text>{inventoryItem}</Text>
+        </ItemDetail>
+        <ItemDetail>
+          <Text>{this.state.activeList[index].count}</Text>
+        </ItemDetail>
+        <IconBox>
+          <Icon
+            type="entypo"
+            name="squared-plus"
+            reverse
+            raised
+            onPress={() => this.incrementByOne(index)}
+          />
 
-              <Icon
-                type="entypo"
-                name="squared-plus"
-                reverse
-                raised
-                onPress={() => this.incrementByOneQuarter(index)}
-              />
+          <Icon
+            type="entypo"
+            name="squared-plus"
+            reverse
+            raised
+            onPress={() => this.incrementByOneQuarter(index)}
+          />
 
-              <Icon
-                type="entypo"
-                name="squared-minus"
-                reverse
-                raised
-                onPress={() => this.decrementByOneQuarter(index)}
-                onLongPress={() => this.decrementByOne(index)}
-              />
-            </IconBox>
-          </ItemBox>
-        ))}
-      </List>
-    )
+          <Icon
+            type="entypo"
+            name="squared-minus"
+            reverse
+            raised
+            onPress={() => this.decrementByOneQuarter(index)}
+            onLongPress={() => this.decrementByOne(index)}
+          />
+        </IconBox>
+      </ItemBox>
+    ))
   }
 
   render() {
