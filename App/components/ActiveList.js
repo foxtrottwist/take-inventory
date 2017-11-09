@@ -17,7 +17,7 @@ const ItemBox = styled.View`
 
 const ItemDetail = styled.View`
   align-items: center;
-  margin-top: 8
+  margin-top: 8;
   margin-bottom: 8;
 `
 
