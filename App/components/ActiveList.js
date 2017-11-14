@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, Alert } from 'react-native'
+import { ScrollView, Alert } from 'react-native'
 import { List, ListItem, Icon, Button } from 'react-native-elements'
 import styled from 'styled-components/native'
 
@@ -11,20 +11,19 @@ const DDP = DocumentDirectoryPath + '/'
 const output = str => str
 
 const ItemBox = styled.View`
-  border-bottom-width: 0.3;
+  border-bottom-width: 1;
   border-bottom-color: #000;
+  height: 185;
+  justify-content: space-around;
 `
 
-const ItemDetail = styled.View`
-  align-items: center;
-  margin-top: 8;
-  margin-bottom: 8;
-`
+const ItemDetail = styled.View`align-items: center;`
+
+const ItemText = styled.Text`font-size: ${({ length }) => (length > 30 ? 16 : 18)};`
 
 const IconBox = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  margin-top: 10;
 `
 
 class ActiveList extends Component {
@@ -108,15 +107,16 @@ class ActiveList extends Component {
         {this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
           <ItemBox key={_id}>
             <ItemDetail>
-              <Text>{inventoryItem}</Text>
+              <ItemText length={inventoryItem.length}>{inventoryItem}</ItemText>
             </ItemDetail>
             <ItemDetail>
-              <Text>{this.state.activeList[index].count}</Text>
+              <ItemText>{this.state.activeList[index].count}</ItemText>
             </ItemDetail>
             <IconBox>
               <Icon
                 type="entypo"
                 name="squared-plus"
+                color="#016025"
                 reverse
                 raised
                 onPress={() => this.incrementByOne(index)}
@@ -125,6 +125,7 @@ class ActiveList extends Component {
               <Icon
                 type="entypo"
                 name="squared-plus"
+                color="#016025"
                 reverse
                 raised
                 onPress={() => this.incrementByOneQuarter(index)}
@@ -133,6 +134,7 @@ class ActiveList extends Component {
               <Icon
                 type="entypo"
                 name="squared-minus"
+                color="#b60009"
                 reverse
                 raised
                 onPress={() => this.decrementByOneQuarter(index)}

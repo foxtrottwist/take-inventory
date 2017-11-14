@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { ScrollView } from 'react-native'
 import { List, ListItem } from 'react-native-elements'
+import { LISTS } from 'react-native-dotenv'
 import axios from 'axios'
 
 class ListIndex extends Component {
@@ -14,7 +15,7 @@ class ListIndex extends Component {
 
   componentDidMount() {
     axios
-      .get('https://order-commander.herokuapp.com/api/inventory_lists')
+      .get(LISTS)
       .then(res => this.setState({ availableLists: res.data }))
       .catch(err => console.log(err))
   }
