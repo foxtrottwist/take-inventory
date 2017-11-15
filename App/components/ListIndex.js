@@ -66,8 +66,9 @@ class ListIndex extends Component {
 
   onSaveList = list => {
     const counted = list.map(item => [item.inventoryItem, item.count])
+    // the same as this.state.countedList.concat(counted)
     const countedList = [...this.state.countedList, ...counted]
-    this.setState(prevState => ({ countedList }))
+    this.setState(() => ({ countedList }))
   }
 
   onListSelect(title, list) {
