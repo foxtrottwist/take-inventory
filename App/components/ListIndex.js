@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Alert } from 'react-native'
+import { ScrollView, Alert, AsyncStorage } from 'react-native'
 import { List, ListItem, Icon, Button } from 'react-native-elements'
 import { LISTS, DROP_BOX } from 'react-native-dotenv'
 import axios from 'axios'
@@ -14,6 +14,7 @@ class ListIndex extends Component {
   state = {
     availableLists: [],
     countedList: [],
+    hasBeenExported: false,
   }
 
   uploadList = file => {
@@ -69,10 +70,27 @@ class ListIndex extends Component {
     // the same as this.state.countedList.concat(counted)
     const countedList = [...this.state.countedList, ...counted]
     this.setState(() => ({ countedList }))
+    AsyncStorage.setItem('inventory', JSON.stringify(countedList))
+  }
+
+  onRemovePreviousInventory = () => {
+    AsyncStorage.removeItem('inventory')
+    this.setState(() => ({ countedList: [] }))
   }
 
   onListSelect(title, list) {
     this.props.navigation.navigate('List', { title, list, onSaveList: this.onSaveList })
+  }
+
+  componentWillMount() {
+    AsyncStorage.getItem('inventory').then(value => {
+      if (value) {
+        savedInventory = JSON.parse(value)
+        this.setState(() => ({ countedList: savedInventory }))
+      } else {
+        this.setState(() => ({ countedList: [] }))
+      }
+    })
   }
 
   componentDidMount() {
@@ -102,10 +120,19 @@ class ListIndex extends Component {
       <ScrollView>
         <Button
           onPress={() => this.exportFile()}
-          title="Export"
+          raised
+          backgroundColor="#110a5c"
+          title="Export Inventory"
           icon={{ name: 'page-export-doc', type: 'foundation' }}
         />
         {this.renderLists()}
+        <Button
+          onPress={() => this.onRemovePreviousInventory()}
+          raised
+          backgroundColor="#b60009"
+          title="Remove Previous Inventory"
+          icon={{ name: 'page-delete', type: 'foundation' }}
+        />
       </ScrollView>
     )
   }

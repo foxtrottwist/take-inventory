@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, Alert } from 'react-native'
-import { List, ListItem, Icon, Button } from 'react-native-elements'
+import { List, Icon, Button } from 'react-native-elements'
 import styled from 'styled-components/native'
 
 const ItemBox = styled.View`
@@ -22,6 +22,7 @@ const IconBox = styled.View`
 class ActiveList extends Component {
   state = {
     activeList: [],
+    isCompleted: false,
   }
 
   incrementByOne = index => {
@@ -96,8 +97,10 @@ class ActiveList extends Component {
       <ScrollView>
         <Button
           onPress={() => this.props.navigation.state.params.onSaveList(this.state.activeList)}
+          raised
+          backgroundColor="#110a5c"
           title="Save List"
-          icon={{ name: 'save', type: 'entypo' }}
+          icon={{ name: 'save', type: 'foundation' }}
         />
         {!this.state.activeList ? null : this.renderInventoryList()}
       </ScrollView>
