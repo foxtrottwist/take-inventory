@@ -3,12 +3,13 @@ import { StackNavigator } from 'react-navigation'
 
 import ListIndex from '../components/ListIndex'
 import ActiveList from '../components/ActiveList'
+import SettingsMenu from '../components/SettingsMenu'
 
-const Root = StackNavigator({
+const ListStack = StackNavigator({
   Index: {
     screen: ListIndex,
     navigationOptions: {
-      title: 'Available Lists',
+      title: 'Take Inventory',
     },
   },
   List: {
@@ -18,5 +19,29 @@ const Root = StackNavigator({
     }),
   },
 })
+
+const SettingsStack = StackNavigator({
+  Settings: {
+    screen: SettingsMenu,
+    navigationOptions: {
+      title: 'Settings',
+    },
+  },
+})
+
+const Root = StackNavigator(
+  {
+    ListView: {
+      screen: ListStack,
+    },
+    Settings: {
+      screen: SettingsStack,
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  },
+)
 
 export default Root

@@ -45,8 +45,9 @@ class ListIndex extends Component {
   }
 
   exportFile = () => {
+    const counted = this.state.countedList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
-    const ws = XLSX.utils.aoa_to_sheet(this.state.countedList)
+    const ws = XLSX.utils.aoa_to_sheet(counted)
 
     /* build new workbook */
     const wb = XLSX.utils.book_new()
@@ -66,9 +67,8 @@ class ListIndex extends Component {
   }
 
   onSaveList = list => {
-    const counted = list.map(item => [item.inventoryItem, item.count])
     // the same as this.state.countedList.concat(counted)
-    const countedList = [...this.state.countedList, ...counted]
+    const countedList = [...this.state.countedList, ...list]
     this.setState(() => ({ countedList }))
     AsyncStorage.setItem('inventory', JSON.stringify(countedList))
   }
@@ -76,6 +76,12 @@ class ListIndex extends Component {
   onRemovePreviousInventory = () => {
     AsyncStorage.removeItem('inventory')
     this.setState(() => ({ countedList: [] }))
+  }
+
+  onSettingsNavigate = () => {
+    this.props.navigation.navigate('Settings', {
+      onRemovePreviousInventory: this.onRemovePreviousInventory,
+    })
   }
 
   onListSelect(title, list) {
@@ -100,7 +106,7 @@ class ListIndex extends Component {
       .catch(err => console.log(err))
   }
 
-  renderLists() {
+  renderAvailableLists() {
     return (
       <List>
         {this.state.availableLists.map(({ title, _id, list, dateCreated }) => (
@@ -119,20 +125,20 @@ class ListIndex extends Component {
     return (
       <ScrollView>
         <Button
-          onPress={() => this.exportFile()}
+          onPress={() => this.onSettingsNavigate()}
           raised
-          backgroundColor="#110a5c"
-          title="Export Inventory"
-          icon={{ name: 'page-export-doc', type: 'foundation' }}
+          backgroundColor="#777"
+          title="Settings"
+          icon={{ name: 'ios-settings-outline', type: 'ionicon' }}
         />
-        {this.renderLists()}
-        <Button
-          onPress={() => this.onRemovePreviousInventory()}
-          raised
-          backgroundColor="#b60009"
-          title="Remove Previous Inventory"
-          icon={{ name: 'page-delete', type: 'foundation' }}
-        />
+        <List>
+          <ListItem
+            title="Inventory"
+            subtitle={`Items Counted: ${this.state.countedList.length}`}
+            onPress={() => {}}
+          />
+        </List>
+        {this.renderAvailableLists()}
       </ScrollView>
     )
   }
