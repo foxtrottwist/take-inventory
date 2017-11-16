@@ -3,6 +3,7 @@ import { StackNavigator } from 'react-navigation'
 
 import ListIndex from '../components/ListIndex'
 import ActiveList from '../components/ActiveList'
+import Inventory from '../components/Inventory'
 import SettingsMenu from '../components/SettingsMenu'
 
 const ListStack = StackNavigator({
@@ -12,11 +13,17 @@ const ListStack = StackNavigator({
       title: 'Take Inventory',
     },
   },
-  List: {
+  Lists: {
     screen: ActiveList,
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.title}`,
     }),
+  },
+  IventoryList: {
+    screen: Inventory,
+    navigationOption: {
+      title: 'Current Inventory',
+    },
   },
 })
 
