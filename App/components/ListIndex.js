@@ -71,11 +71,13 @@ class ListIndex extends Component {
     const countedList = [...this.state.countedList, ...list]
     this.setState(() => ({ countedList }))
     AsyncStorage.setItem('inventory', JSON.stringify(countedList))
+    this.props.navigation.goBack(null)
   }
 
   onRemovePreviousInventory = () => {
     AsyncStorage.removeItem('inventory')
     this.setState(() => ({ countedList: [] }))
+    this.props.navigation.goBack(null)
   }
 
   onSettingsNavigate = () => {
@@ -134,7 +136,7 @@ class ListIndex extends Component {
         <Button
           onPress={() => this.onSettingsNavigate()}
           raised
-          backgroundColor="#777"
+          backgroundColor="#545454"
           title="Settings"
           icon={{ name: 'ios-settings-outline', type: 'ionicon' }}
         />

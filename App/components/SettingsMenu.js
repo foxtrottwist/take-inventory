@@ -9,7 +9,7 @@ class SettingsMenu extends Component {
         <Button
           onPress={() => this.props.navigation.state.params.onRemovePreviousInventory()}
           raised
-          backgroundColor="#b60009"
+          backgroundColor="#c71f16"
           title="Remove Previous Inventory"
           icon={{ name: 'page-delete', type: 'foundation' }}
         />

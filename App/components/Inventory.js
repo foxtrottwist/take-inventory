@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { ScrollView } from 'react-native'
 import { List, ListItem, Button } from 'react-native-elements'
 
+import { ItemBox, ItemDetail, ItemText } from '../utils/sharedStyles'
+
 class Inventory extends Component {
   render() {
     return (
@@ -9,14 +11,21 @@ class Inventory extends Component {
         <Button
           onPress={() => this.props.navigation.state.params.exportList()}
           raised
-          backgroundColor="#110a5c"
+          backgroundColor="#1663c7"
           title="Export Inventory"
           icon={{ name: 'page-export-doc', type: 'foundation' }}
         />
 
         <List>
           {this.props.navigation.state.params.countedList.map(({ _id, inventoryItem, count }) => (
-            <ListItem hideChevron key={_id} title={inventoryItem} subtitle={count} />
+            <ItemBox key={_id} height={100}>
+              <ItemDetail>
+                <ItemText length={inventoryItem.length}>{inventoryItem}</ItemText>
+              </ItemDetail>
+              <ItemDetail>
+                <ItemText>{count}</ItemText>
+              </ItemDetail>
+            </ItemBox>
           ))}
         </List>
       </ScrollView>

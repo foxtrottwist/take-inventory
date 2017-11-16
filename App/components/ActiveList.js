@@ -3,16 +3,7 @@ import { ScrollView, Alert } from 'react-native'
 import { List, Icon, Button } from 'react-native-elements'
 import styled from 'styled-components/native'
 
-const ItemBox = styled.View`
-  border-bottom-width: 1;
-  border-bottom-color: #000;
-  height: 185;
-  justify-content: space-around;
-`
-
-const ItemDetail = styled.View`align-items: center;`
-
-const ItemText = styled.Text`font-size: ${({ length }) => (length > 30 ? 16 : 18)};`
+import { ItemBox, ItemDetail, ItemText } from '../utils/sharedStyles'
 
 const IconBox = styled.View`
   flex-direction: row;
@@ -50,7 +41,7 @@ class ActiveList extends Component {
     return (
       <List>
         {this.state.activeList.map(({ inventoryItem, _id, count }, index) => (
-          <ItemBox key={_id}>
+          <ItemBox key={_id} height={185}>
             <ItemDetail>
               <ItemText length={inventoryItem.length}>{inventoryItem}</ItemText>
             </ItemDetail>
@@ -98,7 +89,7 @@ class ActiveList extends Component {
         <Button
           onPress={() => this.props.navigation.state.params.onSaveList(this.state.activeList)}
           raised
-          backgroundColor="#110a5c"
+          backgroundColor="#109121"
           title="Save List"
           icon={{ name: 'save', type: 'foundation' }}
         />
