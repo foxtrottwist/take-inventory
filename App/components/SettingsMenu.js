@@ -8,6 +8,9 @@ class SettingsMenu extends Component {
       <ScrollView>
         <Button
           onPress={() => this.props.navigation.state.params.onRemovePreviousInventory()}
+          buttonStyle={{ marginTop: 20 }}
+          containerViewStyle={{ borderRadius: 3 }}
+          borderRadius={3}
           raised
           backgroundColor="#c71f16"
           title="Remove Previous Inventory"

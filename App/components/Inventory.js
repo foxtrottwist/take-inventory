@@ -10,6 +10,9 @@ class Inventory extends Component {
       <ScrollView>
         <Button
           onPress={() => this.props.navigation.state.params.exportList()}
+          buttonStyle={{ marginTop: 20 }}
+          containerViewStyle={{ borderRadius: 3 }}
+          borderRadius={3}
           raised
           backgroundColor="#1663c7"
           title="Export Inventory"

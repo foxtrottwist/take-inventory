@@ -135,6 +135,9 @@ class ListIndex extends Component {
       <ScrollView>
         <Button
           onPress={() => this.onSettingsNavigate()}
+          buttonStyle={{ marginTop: 20 }}
+          containerViewStyle={{ borderRadius: 3 }}
+          borderRadius={3}
           raised
           backgroundColor="#545454"
           title="Settings"

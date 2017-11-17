@@ -52,7 +52,7 @@ class ActiveList extends Component {
               <Icon
                 type="entypo"
                 name="squared-plus"
-                color="#016025"
+                color="#109121"
                 reverse
                 raised
                 onPress={() => this.incrementByOne(index)}
@@ -61,7 +61,7 @@ class ActiveList extends Component {
               <Icon
                 type="entypo"
                 name="squared-plus"
-                color="#016025"
+                color="#109121"
                 reverse
                 raised
                 onPress={() => this.incrementByOneQuarter(index)}
@@ -70,7 +70,7 @@ class ActiveList extends Component {
               <Icon
                 type="entypo"
                 name="squared-minus"
-                color="#b60009"
+                color="#c71f16"
                 reverse
                 raised
                 onPress={() => this.decrementByOneQuarter(index)}
@@ -88,6 +88,9 @@ class ActiveList extends Component {
       <ScrollView>
         <Button
           onPress={() => this.props.navigation.state.params.onSaveList(this.state.activeList)}
+          buttonStyle={{ marginTop: 20 }}
+          containerViewStyle={{ borderRadius: 3 }}
+          borderRadius={3}
           raised
           backgroundColor="#109121"
           title="Save List"
