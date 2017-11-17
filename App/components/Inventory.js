@@ -1,10 +1,18 @@
 import React, { Component } from 'react'
 import { ScrollView } from 'react-native'
-import { List, ListItem, Button } from 'react-native-elements'
+import { List, Button } from 'react-native-elements'
 
 import { ItemBox, ItemDetail, ItemText } from '../utils/sharedStyles'
 
 class Inventory extends Component {
+  trimTitle = title => {
+    if (title.length > 28) {
+      return `${title.slice(0, 26)}...`
+    } else {
+      return title
+    }
+  }
+
   render() {
     return (
       <ScrollView>
@@ -21,9 +29,9 @@ class Inventory extends Component {
 
         <List>
           {this.props.navigation.state.params.countedList.map(({ _id, inventoryItem, count }) => (
-            <ItemBox key={_id} height={100}>
+            <ItemBox key={_id} height={60}>
               <ItemDetail>
-                <ItemText length={inventoryItem.length}>{inventoryItem}</ItemText>
+                <ItemText length={inventoryItem.length}>{this.trimTitle(inventoryItem)}</ItemText>
               </ItemDetail>
               <ItemDetail>
                 <ItemText>{count}</ItemText>
