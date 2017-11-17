@@ -1,5 +1,5 @@
 import React from 'react'
-import Root from './navigation'
+import Root from './utils/navigation'
 
 const App = () => <Root />
 

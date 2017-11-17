@@ -44,9 +44,10 @@ class ListIndex extends Component {
       })
   }
 
-  exportFile = () => {
+  exportList = () => {
+    const counted = this.state.countedList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
-    const ws = XLSX.utils.aoa_to_sheet(this.state.countedList)
+    const ws = XLSX.utils.aoa_to_sheet(counted)
 
     /* build new workbook */
     const wb = XLSX.utils.book_new()
@@ -66,20 +67,34 @@ class ListIndex extends Component {
   }
 
   onSaveList = list => {
-    const counted = list.map(item => [item.inventoryItem, item.count])
     // the same as this.state.countedList.concat(counted)
-    const countedList = [...this.state.countedList, ...counted]
+    const countedList = [...this.state.countedList, ...list]
     this.setState(() => ({ countedList }))
     AsyncStorage.setItem('inventory', JSON.stringify(countedList))
+    this.props.navigation.goBack(null)
   }
 
   onRemovePreviousInventory = () => {
     AsyncStorage.removeItem('inventory')
     this.setState(() => ({ countedList: [] }))
+    this.props.navigation.goBack(null)
+  }
+
+  onSettingsNavigate = () => {
+    this.props.navigation.navigate('Settings', {
+      onRemovePreviousInventory: this.onRemovePreviousInventory,
+    })
+  }
+
+  onSelectInventory() {
+    this.props.navigation.navigate('IventoryList', {
+      countedList: this.state.countedList,
+      exportList: this.exportList,
+    })
   }
 
   onListSelect(title, list) {
-    this.props.navigation.navigate('List', { title, list, onSaveList: this.onSaveList })
+    this.props.navigation.navigate('Lists', { title, list, onSaveList: this.onSaveList })
   }
 
   componentWillMount() {
@@ -100,7 +115,7 @@ class ListIndex extends Component {
       .catch(err => console.log(err))
   }
 
-  renderLists() {
+  renderAvailableLists() {
     return (
       <List>
         {this.state.availableLists.map(({ title, _id, list, dateCreated }) => (
@@ -119,20 +134,23 @@ class ListIndex extends Component {
     return (
       <ScrollView>
         <Button
-          onPress={() => this.exportFile()}
+          onPress={() => this.onSettingsNavigate()}
+          buttonStyle={{ marginTop: 20 }}
+          containerViewStyle={{ borderRadius: 3 }}
+          borderRadius={3}
           raised
-          backgroundColor="#110a5c"
-          title="Export Inventory"
-          icon={{ name: 'page-export-doc', type: 'foundation' }}
+          backgroundColor="#545454"
+          title="Settings"
+          icon={{ name: 'ios-settings-outline', type: 'ionicon' }}
         />
-        {this.renderLists()}
-        <Button
-          onPress={() => this.onRemovePreviousInventory()}
-          raised
-          backgroundColor="#b60009"
-          title="Remove Previous Inventory"
-          icon={{ name: 'page-delete', type: 'foundation' }}
-        />
+        <List>
+          <ListItem
+            title="Inventory"
+            subtitle={`Items Counted: ${this.state.countedList.length}`}
+            onPress={() => this.onSelectInventory()}
+          />
+        </List>
+        {this.renderAvailableLists()}
       </ScrollView>
     )
   }
