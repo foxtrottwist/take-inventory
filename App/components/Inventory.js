@@ -17,7 +17,7 @@ class Inventory extends Component {
     return (
       <ScrollView>
         <Button
-          onPress={() => this.props.navigation.state.params.exportList()}
+          onPress={() => this.props.navigation.state.params.onExportList()}
           buttonStyle={{ marginTop: 20 }}
           containerViewStyle={{ borderRadius: 3 }}
           borderRadius={3}

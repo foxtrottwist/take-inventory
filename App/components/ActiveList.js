@@ -46,7 +46,7 @@ class ActiveList extends Component {
               <ItemText length={inventoryItem.length}>{inventoryItem}</ItemText>
             </ItemDetail>
             <ItemDetail>
-              <ItemText>{this.state.activeList[index].count}</ItemText>
+              <ItemText>{count}</ItemText>
             </ItemDetail>
             <IconBox>
               <Icon

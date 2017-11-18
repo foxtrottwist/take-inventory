@@ -44,7 +44,7 @@ class ListIndex extends Component {
       })
   }
 
-  exportList = () => {
+  onExportList = () => {
     const counted = this.state.countedList.map(item => [item.inventoryItem, item.count])
     /* convert AOA to worksheet */
     const ws = XLSX.utils.aoa_to_sheet(counted)
@@ -89,7 +89,7 @@ class ListIndex extends Component {
   onSelectInventory() {
     this.props.navigation.navigate('IventoryList', {
       countedList: this.state.countedList,
-      exportList: this.exportList,
+      onExportList: this.onExportList,
     })
   }
 
