@@ -14,7 +14,6 @@ class ListIndex extends Component {
   state = {
     availableLists: [],
     countedList: [],
-    hasBeenExported: false,
   }
 
   uploadList = file => {
@@ -81,7 +80,9 @@ class ListIndex extends Component {
   }
 
   onSettingsNavigate = () => {
+    const titles = this.state.availableLists.map(list => list.title)
     this.props.navigation.navigate('Settings', {
+      titles,
       onRemovePreviousInventory: this.onRemovePreviousInventory,
     })
   }
@@ -98,14 +99,20 @@ class ListIndex extends Component {
   }
 
   componentWillMount() {
-    AsyncStorage.getItem('inventory').then(value => {
-      if (value) {
-        savedInventory = JSON.parse(value)
-        this.setState(() => ({ countedList: savedInventory }))
-      } else {
-        this.setState(() => ({ countedList: [] }))
-      }
-    })
+    AsyncStorage.getItem('inventory')
+      .then(value => {
+        if (!value) {
+          this.setState(() => ({ countedList: [] }))
+        } else {
+          savedInventory = JSON.parse(value)
+          this.setState(() => ({ countedList: savedInventory }))
+        }
+      })
+      .catch(err => {
+        if (err) {
+          this.setState(() => ({ countedList: [] }))
+        }
+      })
   }
 
   componentDidMount() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Alert } from 'react-native'
+import { ScrollView, Alert, AsyncStorage } from 'react-native'
 import { List, Icon, Button } from 'react-native-elements'
 import styled from 'styled-components/native'
 
@@ -32,9 +32,31 @@ class ActiveList extends Component {
     this.setState(state => ({ activieList: (state.activeList[index].count -= 1) }))
   }
 
+  onUpdateCount = (title, state) => {
+    AsyncStorage.setItem(title, JSON.stringify(state))
+  }
+
+  componentDidUpdate() {
+    const { title } = this.props.navigation.state.params
+    this.onUpdateCount(title, this.state.activeList)
+  }
+
   componentDidMount() {
     const { title, list } = this.props.navigation.state.params
-    this.setState({ activeList: list })
+    AsyncStorage.getItem(title)
+      .then(value => {
+        if (!value) {
+          this.setState(() => ({ activeList: list }))
+        } else {
+          savedList = JSON.parse(value)
+          this.setState(() => ({ activeList: savedList }))
+        }
+      })
+      .catch(err => {
+        if (err) {
+          this.setState(() => ({ activeList: list }))
+        }
+      })
   }
 
   renderInventoryList = () => {
