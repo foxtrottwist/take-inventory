@@ -3,6 +3,9 @@ import { ScrollView, Alert, AsyncStorage } from 'react-native'
 import { List, ListItem, Icon, Button } from 'react-native-elements'
 import { LISTS, DROP_BOX } from 'react-native-dotenv'
 import axios from 'axios'
+import mapKeys from 'lodash/mapKeys'
+import omit from 'lodash/omit'
+import map from 'lodash/map'
 
 import * as XLSX from 'xlsx'
 import RNFetchBlob from 'react-native-fetch-blob'
@@ -65,9 +68,17 @@ class ListIndex extends Component {
       })
   }
 
+  filterAndUpdate = list => {
+    const newItems = list.map(item => item._id)
+    const oldItems = mapKeys(this.state.countedList, '_id')
+    const filteredItems = omit(oldItems, newItems)
+    const newList = [...map(filteredItems), ...list]
+    return newList
+  }
+
   onSaveList = list => {
     // the same as this.state.countedList.concat(counted)
-    const countedList = [...this.state.countedList, ...list]
+    const countedList = this.state.countedList < 0 ? [...list] : [...this.filterAndUpdate(list)]
     this.setState(() => ({ countedList }))
     AsyncStorage.setItem('inventory', JSON.stringify(countedList))
     this.props.navigation.goBack(null)
