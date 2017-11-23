@@ -77,7 +77,6 @@ class ListIndex extends Component {
   }
 
   onSaveList = list => {
-    // the same as this.state.countedList.concat(counted)
     const countedList = this.state.countedList < 0 ? [...list] : [...this.filterAndUpdate(list)]
     this.setState(() => ({ countedList }))
     AsyncStorage.setItem('inventory', JSON.stringify(countedList))
