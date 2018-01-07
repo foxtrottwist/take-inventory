@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ScrollView, Alert, AsyncStorage } from 'react-native'
 import { List, ListItem, Icon, Button } from 'react-native-elements'
-import { LISTS, DROP_BOX } from 'react-native-dotenv'
+import { LISTS, LOGOUT, DROP_BOX } from 'react-native-dotenv'
 import axios from 'axios'
 import mapKeys from 'lodash/mapKeys'
 import omit from 'lodash/omit'
@@ -89,10 +89,18 @@ class ListIndex extends Component {
     this.props.navigation.goBack(null)
   }
 
+  onPressLogout = () => {
+    axios
+      .get(LOGOUT)
+      .then(this.props.navigation.goBack(null))
+      .catch(error => console.log(error))
+  }
+
   onSettingsNavigate = () => {
     const titles = this.state.availableLists.map(list => list.title)
     this.props.navigation.navigate('Settings', {
       titles,
+      onPressLogout: this.onPressLogout,
       onRemovePreviousInventory: this.onRemovePreviousInventory,
     })
   }
@@ -129,7 +137,7 @@ class ListIndex extends Component {
     axios
       .get(LISTS)
       .then(res => this.setState({ availableLists: res.data }))
-      .catch(err => console.log(err))
+      .catch(() => this.props.navigation.navigate('Login'))
   }
 
   renderAvailableLists() {

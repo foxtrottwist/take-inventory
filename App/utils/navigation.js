@@ -1,6 +1,7 @@
 import React from 'react'
 import { StackNavigator } from 'react-navigation'
 
+import LoginForm from '../components/LoginForm'
 import ListIndex from '../components/ListIndex'
 import ActiveList from '../components/ActiveList'
 import Inventory from '../components/Inventory'
@@ -27,6 +28,15 @@ const ListStack = StackNavigator({
   },
 })
 
+const LoginStack = StackNavigator({
+  Login: {
+    screen: LoginForm,
+    navigationOptions: {
+      title: 'Login',
+    },
+  },
+})
+
 const SettingsStack = StackNavigator({
   Settings: {
     screen: SettingsMenu,
@@ -40,6 +50,9 @@ const Root = StackNavigator(
   {
     ListView: {
       screen: ListStack,
+    },
+    Login: {
+      screen: LoginStack,
     },
     Settings: {
       screen: SettingsStack,
