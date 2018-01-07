@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Alert, AsyncStorage } from 'react-native'
+import { ScrollView, Alert, AsyncStorage, RefreshControl } from 'react-native'
 import { List, ListItem, Icon, Button } from 'react-native-elements'
 import { LISTS, LOGOUT, DROP_BOX } from 'react-native-dotenv'
 import axios from 'axios'
@@ -17,6 +17,7 @@ class ListIndex extends Component {
   state = {
     availableLists: [],
     countedList: [],
+    refreshing: false,
   }
 
   uploadList = file => {
@@ -116,6 +117,17 @@ class ListIndex extends Component {
     this.props.navigation.navigate('Lists', { title, list, onSaveList: this.onSaveList })
   }
 
+  onRefresh() {
+    this.setState({ refreshing: true })
+    axios
+      .get(LISTS)
+      .then(res => this.setState({ availableLists: res.data }))
+      .then(() => {
+        this.setState({ refreshing: false })
+      })
+      .catch(() => this.props.navigation.navigate('Login'))
+  }
+
   componentWillMount() {
     AsyncStorage.getItem('inventory')
       .then(value => {
@@ -157,7 +169,11 @@ class ListIndex extends Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />
+        }
+      >
         <Button
           onPress={() => this.onSettingsNavigate()}
           buttonStyle={{ marginTop: 20 }}
