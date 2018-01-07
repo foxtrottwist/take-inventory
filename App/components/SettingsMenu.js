@@ -32,6 +32,15 @@ class SettingsMenu extends Component {
           title="Reset Lists"
           icon={{ name: 'page-delete', type: 'foundation' }}
         />
+        <Button
+          onPress={() => this.props.navigation.state.params.onPressLogout()}
+          buttonStyle={{ marginTop: 20 }}
+          containerViewStyle={{ borderRadius: 3 }}
+          borderRadius={3}
+          raised
+          backgroundColor="#c71f16"
+          title="Logout"
+        />
       </ScrollView>
     )
   }
