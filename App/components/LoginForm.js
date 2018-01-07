@@ -28,7 +28,6 @@ class LoginForm extends Component {
       <ScrollView>
         <FormLabel>Email</FormLabel>
         <FormInput value={this.state.email} onChangeText={email => this.setState({ email })} />
-
         <FormLabel>Password</FormLabel>
         <FormInput
           secureTextEntry
