@@ -155,14 +155,16 @@ class ListIndex extends Component {
   renderAvailableLists() {
     return (
       <List>
-        {this.state.availableLists.map(({ title, _id, list, dateCreated }) => (
-          <ListItem
-            key={_id}
-            title={title}
-            subtitle={`Created on: ${new Date(dateCreated).toLocaleDateString()}`}
-            onPress={() => this.onListSelect(title, list)}
-          />
-        ))}
+        {this.state.availableLists
+          .sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase())
+          .map(({ title, _id, list, dateCreated }) => (
+            <ListItem
+              key={_id}
+              title={title}
+              subtitle={`Created on: ${new Date(dateCreated).toLocaleDateString()}`}
+              onPress={() => this.onListSelect(title, list)}
+            />
+          ))}
       </List>
     )
   }
