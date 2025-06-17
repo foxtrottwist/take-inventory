@@ -69,6 +69,17 @@ LOGOUT=your_logout_endpoint
 DROP_BOX=your_dropbox_access_token
 ```
 
+## Companion Application
+
+This mobile app works in conjunction with **[Order Commander](https://github.com/foxtrottwist/order-commander)**, a full-stack inventory management application that serves as the administrative backend for mobile inventory counting workflows. Order Commander provides:
+
+- **Product Catalog Management** - Administrative interface for creating and organizing inventory lists
+- **Multi-User System** - Secure authentication and role-based access for team collaboration  
+- **RESTful API** - Backend endpoints that serve product data to this mobile counting app
+- **Business Integration** - Data export capabilities that complement Excel-based purchasing workflows
+
+**System Integration:** The combined applications reduced daily inventory management time from 4+ hours to under 2 hours through digital automation and mobile-first counting workflows.
+
 ## Project Context
 
 This was my first production mobile application, built while working as a produce buyer to address inefficiencies in a newly implemented purchasing process. The solution handles inventory counting on the sales floor and exports data to Excel workbooks that calculate optimal purchase quantities and shelf arrangements.
